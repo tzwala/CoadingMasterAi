@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Code Editor</title>
+    <title>Coding Master Ai</title>
     <style>
         :root {
             --dark-bg: #1d1d1d;
@@ -44,6 +44,7 @@
             display: flex;
             flex-direction: column;
             border-right: 1px solid var(--border-color);
+            min-width: 200px; /* Ensure panels don't get too squished */
         }
 
         .editor-panel:last-child {
@@ -58,7 +59,6 @@
             padding: 8px 12px;
             font-size: 14px;
             font-weight: 500;
-            color: #bd93f9; /* Title color for contrast */
         }
 
         .panel-title {
@@ -77,18 +77,18 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            color: var(--text-muted);
         }
 
-        .panel-controls svg {
+        .control-btn {
             width: 16px;
             height: 16px;
-            fill: var(--text-muted);
             cursor: pointer;
-            transition: fill 0.2s ease;
+            transition: color 0.2s ease;
         }
-
-        .panel-controls svg:hover {
-            fill: var(--text-light);
+        
+        .control-btn:hover {
+            color: var(--text-light);
         }
 
         .code-area-wrapper {
@@ -151,8 +151,10 @@
                     <span>HTML</span>
                 </div>
                 <div class="panel-controls">
-                    <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
-                    <svg viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
+                    <svg id="upload-html-btn" class="control-btn" title="Upload HTML File" viewBox="0 0 24 24"><path fill="currentColor" d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z"/></svg>
+                    <svg id="download-html-btn" class="control-btn" title="Download HTML File" viewBox="0 0 24 24"><path fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/></svg>
+                    <svg class="control-btn" title="Settings" viewBox="0 0 24 24"><path fill="currentColor" d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61-.25-1.17-.59-1.69-.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19-.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+                    <svg class="control-btn" title="More" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
                 </div>
             </div>
             <div class="code-area-wrapper">
@@ -171,8 +173,10 @@
                     <span>CSS</span>
                 </div>
                 <div class="panel-controls">
-                    <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
-                    <svg viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
+                    <svg id="upload-css-btn" class="control-btn" title="Upload CSS File" viewBox="0 0 24 24"><path fill="currentColor" d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z"/></svg>
+                    <svg id="download-css-btn" class="control-btn" title="Download CSS File" viewBox="0 0 24 24"><path fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/></svg>
+                    <svg class="control-btn" title="Settings" viewBox="0 0 24 24"><path fill="currentColor" d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61-.25-1.17-.59-1.69-.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19-.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+                    <svg class="control-btn" title="More" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
                 </div>
             </div>
             <div class="code-area-wrapper">
@@ -207,8 +211,10 @@ button {
                     <span>JS</span>
                 </div>
                 <div class="panel-controls">
-                    <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17-.59-1.69-.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
-                    <svg viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
+                    <svg id="upload-js-btn" class="control-btn" title="Upload JS File" viewBox="0 0 24 24"><path fill="currentColor" d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z"/></svg>
+                    <svg id="download-js-btn" class="control-btn" title="Download JS File" viewBox="0 0 24 24"><path fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/></svg>
+                    <svg class="control-btn" title="Settings" viewBox="0 0 24 24"><path fill="currentColor" d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61-.25-1.17-.59-1.69-.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19-.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+                    <svg class="control-btn" title="More" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
                 </div>
             </div>
             <div class="code-area-wrapper">
@@ -226,6 +232,11 @@ console.log("JavaScript is loaded and ready.");
     <div class="output-container">
         <iframe id="output-frame" title="Live Code Output"></iframe>
     </div>
+
+    <!-- Hidden file inputs for uploads -->
+    <input type="file" id="html-upload-input" accept=".html,.htm" style="display: none;">
+    <input type="file" id="css-upload-input" accept=".css" style="display: none;">
+    <input type="file" id="js-upload-input" accept=".js" style="display: none;">
 
     <script>
         const htmlCodeEl = document.getElementById('html-code');
@@ -275,6 +286,8 @@ console.log("JavaScript is loaded and ready.");
             }
         }
 
+        const debouncedRender = debounce(renderOutput, 300);
+
         function updateLineNumbers(type) {
             const codeEl = document.getElementById(`${type}-code`);
             const linesEl = document.getElementById(`${type}-lines`);
@@ -283,18 +296,81 @@ console.log("JavaScript is loaded and ready.");
             debouncedRender();
         }
 
-        const debouncedRender = debounce(renderOutput, 300);
-
-        // Add event listeners to textareas
+        // Add event listeners to textareas and sync scroll
         ['html', 'css', 'js'].forEach(type => {
             const codeEl = document.getElementById(`${type}-code`);
-            // Sync scrolling of line numbers with textarea
             codeEl.addEventListener('scroll', () => {
                 const linesEl = document.getElementById(`${type}-lines`);
                 linesEl.scrollTop = codeEl.scrollTop;
             });
-            // Initial line number update
-            updateLineNumbers(type);
+            updateLineNumbers(type); // Initial update
+        });
+
+        // --- UPLOAD/DOWNLOAD FUNCTIONALITY ---
+        const fileConfigs = {
+            html: {
+                uploadBtn: document.getElementById('upload-html-btn'),
+                downloadBtn: document.getElementById('download-html-btn'),
+                uploadInput: document.getElementById('html-upload-input'),
+                codeEl: htmlCodeEl,
+                filename: 'index.html',
+                mimeType: 'text/html'
+            },
+            css: {
+                uploadBtn: document.getElementById('upload-css-btn'),
+                downloadBtn: document.getElementById('download-css-btn'),
+                uploadInput: document.getElementById('css-upload-input'),
+                codeEl: cssCodeEl,
+                filename: 'style.css',
+                mimeType: 'text/css'
+            },
+            js: {
+                uploadBtn: document.getElementById('upload-js-btn'),
+                downloadBtn: document.getElementById('download-js-btn'),
+                uploadInput: document.getElementById('js-upload-input'),
+                codeEl: jsCodeEl,
+                filename: 'script.js',
+                mimeType: 'application/javascript'
+            }
+        };
+
+        function downloadFile(content, filename, contentType) {
+            const a = document.createElement('a');
+            const file = new Blob([content], { type: contentType });
+            a.href = URL.createObjectURL(file);
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
+        Object.keys(fileConfigs).forEach(type => {
+            const config = fileConfigs[type];
+
+            // Download button event listener
+            config.downloadBtn.addEventListener('click', () => {
+                downloadFile(config.codeEl.value, config.filename, config.mimeType);
+            });
+
+            // Upload button triggers file input
+            config.uploadBtn.addEventListener('click', () => {
+                config.uploadInput.click();
+            });
+
+            // File input change event listener
+            config.uploadInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    config.codeEl.value = e.target.result;
+                    // Update UI after loading file
+                    updateLineNumbers(type);
+                };
+                reader.readAsText(file);
+                // Clear the input value to allow uploading the same file again
+                event.target.value = '';
+            });
         });
 
         // Initial render on page load
