@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Code Editor</title>
+    <style>
+        :root {
+            --dark-bg: #1d1d1d;
+            --editor-bg: #282a36;
+            --header-bg: #21222c;
+            --border-color: #111;
+            --text-light: #f8f8f2;
+            --text-muted: #6272a4;
+            --html-color: #ff5555;
+            --css-color: #8be9fd;
+            --js-color: #f1fa8c;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+                Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .editors-container {
+            display: flex;
+            background-color: var(--header-bg);
+            border-bottom: 2px solid var(--border-color);
+            min-height: 250px; /* Minimum height for editors */
+            height: 40vh; /* Relative height */
+            resize: vertical;
+            overflow: auto;
+        }
+
+        .editor-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .editor-panel:last-child {
+            border-right: none;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--header-bg);
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #bd93f9; /* Title color for contrast */
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-light);
+        }
+
+        .panel-title svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .panel-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .panel-controls svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--text-muted);
+            cursor: pointer;
+            transition: fill 0.2s ease;
+        }
+
+        .panel-controls svg:hover {
+            fill: var(--text-light);
+        }
+
+        .code-area-wrapper {
+            position: relative;
+            flex-grow: 1;
+            background-color: var(--editor-bg);
+            overflow: hidden;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 15px;
+            padding: 10px 10px 10px 40px;
+            box-sizing: border-box;
+            resize: none;
+            outline: none;
+            line-height: 1.5;
+        }
+
+        /* Basic static line numbering */
+        .line-numbers {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            width: 30px;
+            padding-right: 10px;
+            text-align: right;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 15px;
+            color: var(--text-muted);
+            pointer-events: none;
+            line-height: 1.5;
+        }
+
+        .output-container {
+            flex-grow: 1;
+        }
+
+        #output-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="editors-container">
+        <!-- HTML Panel -->
+        <div class="editor-panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <svg viewBox="0 0 24 24"><path fill="var(--html-color)" d="M13 9H20.5L13 16.5V9M11.5 9L4 16.5H11.5V9M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2Z"/></svg>
+                    <span>HTML</span>
+                </div>
+                <div class="panel-controls">
+                    <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+                    <svg viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
+                </div>
+            </div>
+            <div class="code-area-wrapper">
+                <div class="line-numbers" id="html-lines">1</div>
+                <textarea id="html-code" spellcheck="false" oninput="updateLineNumbers('html')"><h1>Welcome to the Live Editor!</h1>
+<p>Change the code on the left to see the result here.</p>
+<button onclick="showAlert()">Click Me</button>
+</textarea>
+            </div>
+        </div>
+        <!-- CSS Panel -->
+        <div class="editor-panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <svg viewBox="0 0 24 24"><path fill="var(--css-color)" d="M12,16.2l-3.3,1.9l0.9-3.8l-3-2.8h3.6l1.3-4.1l1.3,4.1h3.6l-3,2.8l0.9,3.8L12,16.2z M12,2C6.5,2,2,6.5,2,12s4.5,10,10,10c5.5,0,10-4.5,10-10S17.5,2,12,2z"/></svg>
+                    <span>CSS</span>
+                </div>
+                <div class="panel-controls">
+                    <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+                    <svg viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
+                </div>
+            </div>
+            <div class="code-area-wrapper">
+                <div class="line-numbers" id="css-lines">1</div>
+                <textarea id="css-code" spellcheck="false" oninput="updateLineNumbers('css')">body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  margin-top: 50px;
+  color: #333;
+}
+button {
+  background-color: #8be9fd;
+  border: none;
+  color: #282a36;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+}</textarea>
+            </div>
+        </div>
+        <!-- JS Panel -->
+        <div class="editor-panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                     <svg viewBox="0 0 24 24"><path fill="var(--js-color)" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H8.5C8.2,17 8,16.8 8,16.5V10.5C8,9.9 8.4,9.5 9,9.5H9C9.6,9.5 10,9.9 10,10.5V14H11.5C12.1,14 12.5,14.4 12.5,15C12.5,15.6 12.1,16 11.5,16H11V17M16,17H15.5C15.2,17 15,16.8 15,16.5V10.5C15,9.9 15.4,9.5 16,9.5H16C16.6,9.5 17,9.9 17,10.5V14H18.5C19.1,14 19.5,14.4 19.5,15C19.5,15.6 19.1,16 18.5,16H17V17Z" /></svg>
+                    <span>JS</span>
+                </div>
+                <div class="panel-controls">
+                    <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17-.59-1.69-.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+                    <svg viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
+                </div>
+            </div>
+            <div class="code-area-wrapper">
+                <div class="line-numbers" id="js-lines">1</div>
+                <textarea id="js-code" spellcheck="false" oninput="updateLineNumbers('js')">function showAlert() {
+  alert("Hello from JavaScript!");
+}
+
+console.log("JavaScript is loaded and ready.");
+</textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="output-container">
+        <iframe id="output-frame" title="Live Code Output"></iframe>
+    </div>
+
+    <script>
+        const htmlCodeEl = document.getElementById('html-code');
+        const cssCodeEl = document.getElementById('css-code');
+        const jsCodeEl = document.getElementById('js-code');
+        const outputFrame = document.getElementById('output-frame');
+        
+        // Simple debounce function to limit render calls
+        function debounce(func, delay) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
+        function renderOutput() {
+            try {
+                const html = htmlCodeEl.value;
+                const css = cssCodeEl.value;
+                const js = jsCodeEl.value;
+
+                const source = `
+                    <html>
+                        <head>
+                            <style>${css}</style>
+                        </head>
+                        <body>
+                            ${html}
+                            <script>
+                                // Basic error handling for the iframe
+                                window.addEventListener('error', function(e) {
+                                    console.error('Error in user script:', e.message, 'at line:', e.lineno, 'col:', e.colno);
+                                });
+                                try {
+                                    ${js}
+                                } catch(e) {
+                                    console.error(e);
+                                }
+                            <\/script>
+                        </body>
+                    </html>
+                `;
+                outputFrame.srcdoc = source;
+            } catch (e) {
+                console.error("Error rendering output:", e);
+            }
+        }
+
+        function updateLineNumbers(type) {
+            const codeEl = document.getElementById(`${type}-code`);
+            const linesEl = document.getElementById(`${type}-lines`);
+            const lineCount = codeEl.value.split('\n').length;
+            linesEl.innerHTML = Array.from({ length: lineCount }, (_, i) => i + 1).join('<br>');
+            debouncedRender();
+        }
+
+        const debouncedRender = debounce(renderOutput, 300);
+
+        // Add event listeners to textareas
+        ['html', 'css', 'js'].forEach(type => {
+            const codeEl = document.getElementById(`${type}-code`);
+            // Sync scrolling of line numbers with textarea
+            codeEl.addEventListener('scroll', () => {
+                const linesEl = document.getElementById(`${type}-lines`);
+                linesEl.scrollTop = codeEl.scrollTop;
+            });
+            // Initial line number update
+            updateLineNumbers(type);
+        });
+
+        // Initial render on page load
+        renderOutput();
+
+    </script>
+</body>
+</html>
